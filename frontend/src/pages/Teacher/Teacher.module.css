@@ -1,0 +1,7 @@
+.teacher {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(180deg,rgb(106, 11, 117),pink) no-repeat fixed;
+  }
