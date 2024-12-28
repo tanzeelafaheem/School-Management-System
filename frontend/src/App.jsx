@@ -5,6 +5,7 @@ import Teacher from './pages/Teacher/Teacher';
 import Login from './pages/Login/Login';
 import Navbar from './components/Navbar/Navbar';
 import Home from './components/Home/Home';
+import Profile from './pages/Profile/profile'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route path="/login/admin" element={<Admin />} />
         <Route path="/login/teacher" element={<Teacher />} />
+        <Route path="/login/teacher/profile" element={<Profile />} />
         <Route path="/login" element={<Login />} />
         <Route path="*" element={<Home />} /> 
       </Routes>

@@ -1,5 +1,35 @@
 const db = require('../config/dbConfig');
 
+//login
+exports.login = (req, res) => {
+  const { email, pass } = req.body;
+  const query = 'SELECT * FROM USER WHERE email = ? AND pass = ?';
+  
+  db.query(query, [email, pass], (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    
+    if (result.length === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    
+    // Assuming that the result contains user data, you should return the necessary user info
+    const user = result[0];
+    const { userId, userName, email, phoneNo, userType } = user;
+
+    // Send back a user object with only necessary details
+    res.json({
+      userId,
+      userName,
+      email,
+      phoneNo,
+      userType, // Ensure you return 'userType' here to help frontend navigate
+    });
+  });
+};
+
+
 // Add
 exports.addUser = (req, res) => {
   const { userName, email, pass, phoneNo, userType } = req.body;
@@ -24,7 +54,7 @@ exports.getAllUsers = (req, res) => {
   });
 };
 
-// Get user
+// Get user by id
 exports.getUserById = (req, res) => {
   const userId = req.params.id;
 
