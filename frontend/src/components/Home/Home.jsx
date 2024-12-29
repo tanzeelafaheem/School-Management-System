@@ -9,8 +9,8 @@ const Home = () => {
         <h1>Login As...?</h1>
         <Link to="/login">
         <button id="teacher" className={HomeCss.btn}>Teacher</button>
+        <button id="Admin" className={HomeCss.btn}>Admin</button>
       </Link>
-      <button id="Admin" className={HomeCss.btn}>Admin</button>
     </div>
     </div>
   )
