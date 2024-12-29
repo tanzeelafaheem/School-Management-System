@@ -88,11 +88,27 @@ exports.updateUser = (req, res) => {
 exports.deleteUser = (req, res) => {
   const userId = req.params.id;
 
-  const query = 'DELETE FROM USER WHERE userId = ?';
-  db.query(query, [userId], (err, result) => {
+  const deleteScheduleQuery = 'DELETE FROM schedule WHERE userId = ?';
+
+  db.query(deleteScheduleQuery, [userId], (err, result) => {
     if (err) {
-      return res.status(500).json({ error: err.message });
+      console.log("Error deleting schedules:", err.message);
+    
+      return res.status(500).json({ error: 'Error deleting associated schedules: ' + err.message });
     }
-    res.json({ message: 'User deleted successfully' });
+
+    console.log("Schedules deleted for userId:", userId);
+
+    const deleteUserQuery = 'DELETE FROM user WHERE userId = ?';
+    db.query(deleteUserQuery, [userId], (err, result) => {
+      if (err) {
+        console.log("Error deleting user:", err.message);
+ 
+        return res.status(500).json({ error: 'Error deleting user: ' + err.message });
+      }
+
+      res.json({ message: 'User and associated schedules deleted successfully' });
+    });
   });
 };
+

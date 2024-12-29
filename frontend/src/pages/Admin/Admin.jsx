@@ -8,7 +8,7 @@ const Admin = () => {
       <h1>Admin Page</h1>
 
       <div className={AdminCss['section-buttons']}>
-        <Link to="login/admin/manageTeacher">
+        <Link to="/login/admin/manageTeacher">
         <button>Manage Teachers</button>
         </Link>
         <button>Manage Subjects</button>

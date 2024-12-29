@@ -6,7 +6,7 @@ import Login from './pages/Login/Login';
 import Navbar from './components/Navbar/Navbar';
 import Home from './components/Home/Home';
 import Profile from './pages/Profile/profile'
-import Manage from './pages/Teacher/Manage'
+import ManageTeacher from './pages/Manage/ManageTeacher'
 
 function App() {
   return (
@@ -19,7 +19,7 @@ function App() {
         <Route path="/login/teacher/profile" element={<Profile />} />
         <Route path="/login" element={<Login />} />
         <Route path="*" element={<Home />} /> 
-        <Route path="/login/admin/manageTeacher"element ={<Manage/>}/>
+        <Route path="/login/admin/manageTeacher"element ={<ManageTeacher/>}/>
       </Routes>
     </Router>
     </div>
