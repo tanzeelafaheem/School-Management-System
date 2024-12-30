@@ -42,7 +42,7 @@ exports.updateSubject = (req, res) => {
 exports.deleteSubject = (req, res) => {
   const subjectId = req.params.id;
 
-  const deleteScheduleQuery = 'DELETE FROM schedule WHERE subjectId = ?';
+  const deleteScheduleQuery = 'DELETE FROM Schedule WHERE subjectId = ?';
 
   db.query(deleteScheduleQuery, [subjectId], (err, result) => {
     if (err) {

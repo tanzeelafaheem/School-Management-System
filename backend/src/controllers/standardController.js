@@ -61,17 +61,26 @@ exports.updateStandard = (req, res) => {
 
 //delete by id
 exports.deleteStandard = (req, res) => {
-    const { id } = req.params;
-    
-    const query = 'DELETE FROM standard WHERE standardId = ?';
-    
-    db.query(query, [id], (err, results) => {
+    const { standardId } = req.params;
+
+    const query1='DELETE FROM Schedule WHERE standardId = ?';
+    db.query(query1, [standardId], (err, results) => {
         if (err) {
-            return res.json({ error: 'Database error: ' + err.message });
+             console.log("Error deleting schedule :",err.message);
+             return res.status(500).json({error:'Error deleting associated schedules :'+err.message});
         }
-        if (results.affectedRows === 0) {
-            return res.status(404).json({ message: 'Standard not found' });
-        }
-        res.json({ message: 'Standard deleted successfully' });
-    });
+        console.log("Schedules deleted for Standard Id:",standardId);
+    
+    const query2 = 'DELETE FROM Standard WHERE standardId = ?';
+    
+    db.query(query2, [standardId], (err, results) => {
+        if (err) {
+            console.log("Error deleting subject:", err.message);
+     
+            return res.status(500).json({ error: 'Error deleting subject: ' + err.message });
+          }
+    
+          res.json({ message: 'Subject and associated schedules deleted successfully' });
+        });
+})
 };

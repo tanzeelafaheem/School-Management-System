@@ -26,7 +26,7 @@ const ManageSubject = () => {
         console.log(`Deleting subject with ID: ${subjectId}`);
         if(res.ok){
           alert("subject deleted successfully");
-          setSubject((prevSubjects) => prevSubjects.filter((t) => t.SubjectId !== subjectId));
+          setSubject((prevSubjects) => prevSubjects.filter((t) => t.subjectId !== subjectId));
         }
         else{
           alert("could not delete subject");
@@ -48,9 +48,9 @@ const ManageSubject = () => {
          });
    
            if (res.ok) {
-         const newUser = await res.json();
+         const newSubject = await res.json();
           alert('Subject added successfully');
-          setSubject((prevSubjects) => [...prevSubjects, newUser]);
+          setSubject((prevSubjects) => [...prevSubjects, newSubject]);
         } else {
           const errorResponse = await res.json(); 
           console.log("Error response:", errorResponse);
@@ -76,16 +76,16 @@ const ManageSubject = () => {
          <button onClick={handleViewAll} className="btn btn-info">View All</button>
        </div>
        <ul>
-   {subject
-     .map((subject) => (
-       <li key={subject.subjectId}>
-         <p>Subject Name: {subject.subjectName}</p>
-         <button onClick={()=>handleDlt(subject.subjectId)} className="btn btn-danger">Delete</button>
-         <br />
-         <button className="btn btn-success">Edit</button>
-       </li>
-     ))}
- </ul>
+  {subject.map((subject, index) => (
+    <li key={subject.subjectId || index}>
+      <p>Subject Name: {subject.subjectName}</p>
+      <button onClick={() => handleDlt(subject.subjectId)} className="btn btn-danger">Delete</button>
+      <br />
+      <button className="btn btn-success">Edit</button>
+    </li>
+  ))}
+</ul>
+
      </div>
    );
  };
