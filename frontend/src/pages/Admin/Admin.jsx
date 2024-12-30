@@ -11,9 +11,15 @@ const Admin = () => {
         <Link to="/login/admin/manageTeacher">
         <button>Manage Teachers</button>
         </Link>
+        <Link to ="/login/admin/manageSubject">
         <button>Manage Subjects</button>
-        <button>Manage Standards</button>
+        </Link>
+        <Link to ="/login/admin/manageStandard">
+        <button>Manage Standard</button>
+        </Link>
+        <Link to ="/login/admin/manageSchedule">
         <button>Manage Schedule</button>
+        </Link>
       </div>
     </div>
   );

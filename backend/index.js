@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const userRouter = require("./src/routes/userRoutes");
-const subjectRouter = require("./src/routes/scheduleRoutes");
+const subjectRouter = require("./src/routes/subjectRoutes");
 const standardRouter= require("./src/routes/standardRoutes");
 const sectionRouter=require("./src/routes/sectionRoutes");
 const scheduleRouter=require("./src/routes/scheduleRoutes");

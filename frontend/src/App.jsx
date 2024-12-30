@@ -7,6 +7,9 @@ import Navbar from './components/Navbar/Navbar';
 import Home from './components/Home/Home';
 import Profile from './pages/Profile/profile'
 import ManageTeacher from './pages/Manage/ManageTeacher'
+import ManageSubject from './pages/Manage/ManageSubject';
+import ManageSchedule from './pages/Manage/ManageSchedule';
+import ManageStandard from './pages/Manage/ManageStandard';
 
 function App() {
   return (
@@ -20,6 +23,9 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="*" element={<Home />} /> 
         <Route path="/login/admin/manageTeacher"element ={<ManageTeacher/>}/>
+        <Route path="/login/admin/manageSubject"element ={<ManageSubject/>}/>
+        <Route path="/login/admin/manageStandard"element ={<ManageStandard/>}/>
+        <Route path="/login/admin/manageSchedule"element ={<ManageSchedule/>}/>
       </Routes>
     </Router>
     </div>

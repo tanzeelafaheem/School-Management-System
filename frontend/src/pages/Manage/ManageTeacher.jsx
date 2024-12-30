@@ -1,6 +1,7 @@
-import React, { useState, useEffect, cloneElement } from 'react';
+import React, { useState, useEffect } from 'react';
+import CssStyle from './Manage.module.css'
 
-const Manage = () => {
+  const ManageTeacher = () => {
   const [teacher, setTeacher] = useState([]); 
   const[formData,setFormData]=useState({
     userName: '',
@@ -66,7 +67,7 @@ const Manage = () => {
 
   return (
     <div>
-      <div className="add">
+      <div className={CssStyle.container}>
         <input type="text" 
         placeholder="User Name" 
         value={formData.userName} 
@@ -86,21 +87,22 @@ const Manage = () => {
         placeholder="Phone Number"
          value={formData.phoneNo}
          onChange={(e) => setFormData({ ...formData, phoneNo: e.target.value })}
-         />
-        <button onClick={handleAdd}>Add</button>
+          />
+        <button onClick={handleAdd} className="btn btn-info">Add</button>
+        <br /><br />
+        <button onClick={handleViewAll} className="btn btn-info">View All</button>
       </div>
-      <button onClick={handleViewAll}>View All</button>
       <ul>
   {teacher
-    .filter((teacher) => teacher.userType === "TEACHER") // Filter for userType: "TEACHER"
+    .filter((teacher) => teacher.userType === "TEACHER") 
     .map((teacher) => (
       <li key={teacher.userId}>
         <p>Teacher Name: {teacher.userName}</p>
         <p>Email: {teacher.email}</p>
         <p>Contact No: {teacher.phoneNo}</p>
-        <button onClick={()=>handleDlt(teacher.userId)}>Delete</button>
+        <button onClick={()=>handleDlt(teacher.userId)} className="btn btn-danger">Delete</button>
         <br />
-        <button>Edit</button>
+        <button className="btn btn-success">Edit</button>
       </li>
     ))}
 </ul>
@@ -108,4 +110,4 @@ const Manage = () => {
   );
 };
 
-export default Manage;
+export default ManageTeacher;

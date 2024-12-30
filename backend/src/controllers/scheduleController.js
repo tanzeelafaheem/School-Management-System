@@ -57,9 +57,9 @@ return res.json({ error: err.message });
  //Update
  exports.updateSchedule=(req,res)=>{
   const scheduleId=req.params.id;
-  const { standardId, subjectId, userId, startTime, endTime, date } = req.body;
+  const { standardId, subjectId, userId, startTime, endTime, scheduleDate } = req.body;
   const query = 'UPDATE SCHEDULE SET standardId=?, subjectId=?, userId=?, startTime=?, endTime=?, date=?';
-  db.query(query,[standardId, subjectId, userId, startTime, endTime, date],(err,reult)=>{
+  db.query(query,[standardId, subjectId, userId, startTime, endTime, scheduleDate],(err,reult)=>{
     if (err) {
       return res.json({ error: err.message });
     }

@@ -14,17 +14,17 @@ exports.login = (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
     
-    // Assuming that the result contains user data, you should return the necessary user info
+
     const user = result[0];
     const { userId, userName, email, phoneNo, userType } = user;
 
-    // Send back a user object with only necessary details
+
     res.json({
       userId,
       userName,
       email,
       phoneNo,
-      userType, // Ensure you return 'userType' here to help frontend navigate
+      userType, 
     });
   });
 };
