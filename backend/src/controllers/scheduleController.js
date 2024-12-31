@@ -2,10 +2,10 @@ const db = require('../config/dbConfig');
 
 //Add
 exports.addSchedule = (req, res) => {
-const { standardId, subjectId, userId, startTime, endTime, date } = req.body;
+const { standardId, subjectId, userId, startTime, endTime, scheduleDate } = req.body;
 
-const query = 'INSERT INTO schedule (standardId, subjectId, userId, startTime, endTime, date) VALUES (?, ?, ?, ?, ?, ?)';
-db.query(query, [standardId, subjectId, userId, startTime, endTime, date], (err, result) => {
+const query = 'INSERT INTO schedule (standardId, subjectId, userId, startTime, endTime, scheduleDate) VALUES (?, ?, ?, ?, ?, ?)';
+db.query(query, [standardId, subjectId, userId, startTime, endTime, scheduleDate], (err, result) => {
 if (err) {
 return res.json({ error: err.message });
 }
@@ -17,8 +17,9 @@ res.json({message:'Schedule added successfully!' });
 exports.getAllSchedules = (req, res) => {
   const query = `
     SELECT 
+      schedule.scheduleId,
       subject.subjectName,
-      USER.userName,
+      user.userName,
       standard.standardName,
       section.sectionName,
       schedule.startTime,
@@ -46,7 +47,7 @@ exports.getAllSchedules = (req, res) => {
 //Delete by ID
 exports.deleteSchedule = (req, res) => {
 const scheduleId = req.params.id;
-const query = 'DELETE FROM schedule WHERE standardId = ?';
+const query = 'DELETE FROM schedule WHERE scheduleId = ?';
 db.query(query, [scheduleId], (err, result) => {
 if (err) {
 return res.json({ error: err.message });
@@ -69,19 +70,21 @@ return res.json({ error: err.message });
  //get by id
 exports.getScheduleById = (req, res) => {
   const scheduleId = req.params.id; 
+  console.log("Id:",scheduleId);
   const query = `
       SELECT 
-          subject.subName,
-          USER.userName,
+          schedule.scheduleId,
+          subject.subjectName,
+          user.userName,
           standard.standardName,
           section.sectionName,
           schedule.startTime,
           schedule.endTime,
-          schedule.date
+          schedule.scheduleDate
       FROM 
           schedule
       JOIN 
-          subject ON schedule.subjectId = subject.subId
+          subject ON schedule.subjectId = subject.subjectId
       JOIN 
           USER ON schedule.userId = USER.userId
       JOIN 

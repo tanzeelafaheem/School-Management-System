@@ -1,13 +1,26 @@
-import React from "react";
-import { useState,useEffect } from "react";
-import CssStyle from './Manage.module.css'
+import React, { useState, useEffect } from "react";
+import CssStyle from "./Manage.module.css";
 
 const ManageStandard = () => {
   const [standard, setStandard] = useState([]);
+  const [sections, setSections] = useState([]); 
   const [formData, setFormData] = useState({
-    standardName: '',
-    sectionId: '',
+    standardName: "",
+    sectionId: "",
   });
+
+  // Fetch sections from the Section table
+  const fetchSections = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/section"); 
+      const jsonRes = await res.json();
+      setSections(jsonRes);
+    } catch (error) {
+      console.error("Error fetching sections:", error);
+    }
+  };
+
+  // Fetch all standards
   const handleViewAll = async () => {
     try {
       const res = await fetch("http://localhost:5000/standard");
@@ -18,25 +31,29 @@ const ManageStandard = () => {
       console.error("Error:", error);
     }
   };
-   const handleDlt = async (standardId) => {
-     try {
-       const res = await fetch(`http://localhost:5000/standard/${standardId}`, {
-         method: "DELETE",
-       });
-       console.log(`Deleting standard with ID: ${standardId}`);
-       if (res.ok) {
-         alert("Standard deleted successfully");
-         setStandard((prevStandard) =>
-           prevStandard.filter((t) => t.standardId !== standardId)
-         );
-       } else {
-         alert("could not delete standard");
-         console.log("Failed to delete standard");
-       }
-     } catch (error) {
-       console.log("Error:", error.message);
-     }
-   };
+
+  // Delete a standard
+  const handleDlt = async (standardId) => {
+    try {
+      const res = await fetch(`http://localhost:5000/standard/${standardId}`, {
+        method: "DELETE",
+      });
+      console.log(`Deleting standard with ID: ${standardId}`);
+      if (res.ok) {
+        alert("Standard deleted successfully");
+        setStandard((prevStandard) =>
+          prevStandard.filter((t) => t.standardId !== standardId)
+        );
+      } else {
+        alert("Could not delete standard");
+        console.log("Failed to delete standard");
+      }
+    } catch (error) {
+      console.log("Error:", error.message);
+    }
+  };
+
+  // Add a new standard
   const handleAdd = async () => {
     try {
       const res = await fetch("http://localhost:5000/standard", {
@@ -64,6 +81,11 @@ const ManageStandard = () => {
     }
   };
 
+  // Fetch sections
+  useEffect(() => {
+    fetchSections();
+  }, []);
+
   return (
     <div>
       <div className={CssStyle.container}>
@@ -82,18 +104,13 @@ const ManageStandard = () => {
           }
         >
           <option value="">Select Section</option>
-          <option value="1">A</option>
-          <option value="2">B</option>
-          <option value="3">C</option>
-          <option value="4">D</option>
-          <option value="5">E</option>
-          <option value="6">F</option>
-          <option value="7">G</option>
-          <option value="8">H</option>
-          <option value="9">I</option>
-          <option value="10">J</option>
+          {sections.map((section) => (
+            <option key={section.sectionId} value={section.sectionId}>
+              {section.sectionName}
+            </option>
+          ))}
         </select>
-         <br />
+        <br />
         <button onClick={handleAdd} className="btn btn-info">
           Add
         </button>
@@ -104,17 +121,26 @@ const ManageStandard = () => {
         </button>
       </div>
       <ul>
-        {standard.map((standard,index) => (
-          <li key={standard.standardId||index}>
+        {standard.map((standard, index) => (
+          <li key={standard.standardId || index}>
             <p>Standard Name: {standard.standardName}</p>
-            <p>Section:{standard.sectionId}</p>
-            { <button
+            <p>
+              Section:{" "}
+              {
+                sections.find((section) => section.sectionId === standard.sectionId)
+                  ?.sectionName
+              }
+            </p>
+            <button
               onClick={() => handleDlt(standard.standardId)}
               className="btn btn-danger"
             >
               Delete
-            </button> }
+            </button>
             <br />
+            <div className={CssStyle.edit}></div>
+            <input type="text" placeholder="Standard Name" />
+            <input type="text" placeholder="Section" />
             <button className="btn btn-success">Edit</button>
           </li>
         ))}

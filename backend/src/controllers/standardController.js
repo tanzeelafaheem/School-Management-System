@@ -46,7 +46,7 @@ exports.updateStandard = (req, res) => {
     const { id } = req.params;
     const { standardName, sectionId } = req.body;
     
-    const query = 'UPDATE standard SET standardName = ?, sectionId = ? WHERE standardId = ?';
+    const query = 'UPDATE Standard SET standardName = ?, sectionId = ? WHERE standardId = ?';
     
     db.query(query, [standardName, sectionId, id], (err, results) => {
         if (err) {
