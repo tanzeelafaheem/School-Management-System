@@ -3,13 +3,20 @@ import CssStyle from './Manage.module.css'
 
   const ManageTeacher = () => {
   const [teacher, setTeacher] = useState([]); 
-  const[formData,setFormData]=useState({
+  const[addData,setAddData]=useState({
     userName: '',
     email: '',
     pass: '',
     phoneNo: '',
     userType: 'TEACHER',
   })
+  const[updateData,setupdateData]=useState({
+    userName: '',
+    email: '',
+    pass: '',
+    phoneNo: '',
+    userType: 'TEACHER',
+       })
   const handleViewAll = async () => {
     try {
       const res = await fetch("http://localhost:5000/user");
@@ -46,7 +53,7 @@ import CssStyle from './Manage.module.css'
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(addData),
       });
   
       if (res.ok) {
@@ -63,6 +70,33 @@ import CssStyle from './Manage.module.css'
       alert("Something went wrong. Please try again.");
     }
   };
+  const handleEdit=async(userId)=>{
+    try{
+      const res=await fetch(`http://localhost/user/${userId}`,{
+        method:'PUT',
+        headers:{
+          'Content-Type':'application/json'
+      },
+        body:JSON.stringify(updateData)
+      })
+      if(res.ok){
+        const updatedUser = await res.json(); 
+          alert("User updated successfully");
+          setTeacher((prevUser =>
+            prevUser.map((user) =>
+              user.userId === userId ? updatedUser : user
+            )
+          ))}
+          else {
+          const errorResponse = await res.json(); 
+          console.log("Error response:", errorResponse);
+          alert("Failed to update User: " + (errorResponse.message || "Unknown error"));
+        }}
+        catch(error){
+          console.error("An error occurred:", error);
+          alert("Something went wrong. Please try again.");
+        }  
+     }
   
 
   return (
@@ -70,23 +104,23 @@ import CssStyle from './Manage.module.css'
       <div className={CssStyle.container}>
         <input type="text" 
         placeholder="User Name" 
-        value={formData.userName} 
-        onChange={(e) => setFormData({ ...formData, userName: e.target.value })}
+        value={addData.userName} 
+        onChange={(e) => setaddData({ ...addData, userName: e.target.value })}
         />
         <input type="email" 
         placeholder="Email" 
-        value={formData.email}
-        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+        value={addData.email}
+        onChange={(e) => setAddData({ ...addData, email: e.target.value })}
         />
         <input type="password" 
         placeholder="password"
-         value={formData.pass}
-         onChange={(e) => setFormData({ ...formData, pass: e.target.value })}
+         value={addData.pass}
+         onChange={(e) => setAddData({ ...addData, pass: e.target.value })}
          />
         <input type="text" 
         placeholder="Phone Number"
-         value={formData.phoneNo}
-         onChange={(e) => setFormData({ ...formData, phoneNo: e.target.value })}
+         value={addData.phoneNo}
+         onChange={(e) => setAddData({ ...addData, phoneNo: e.target.value })}
           />
         <button onClick={handleAdd} className="btn btn-info">Add</button>
         <br /><br />
@@ -102,7 +136,16 @@ import CssStyle from './Manage.module.css'
         <p>Contact No: {teacher.phoneNo}</p>
         <button onClick={()=>handleDlt(teacher.userId)} className="btn btn-danger">Delete</button>
         <br />
-        <button className="btn btn-success">Edit</button>
+         <input type="text"
+          placeholder='Updated Teacher Name' 
+        onChange={(e) => setupdateData({ ...updateData, userName: e.target.value })}/>
+         <input type="text"
+          placeholder='Updated Email' 
+        onChange={(e) => setupdateData({ ...updateData, email: e.target.value })}/>
+         <input type="text"
+          placeholder='Updated Contact-No' 
+        onChange={(e) => setupdateData({ ...updateData, phoneNo: e.target.value })}/>
+        <button onClick={()=>handleEdit(teacher.userId)}className="btn btn-success">Edit</button>
       </li>
     ))}
 </ul>

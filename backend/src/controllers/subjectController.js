@@ -27,16 +27,25 @@ exports.getAllSubjects = (req, res) => {
 // Update subject by ID
 exports.updateSubject = (req, res) => {
   const subjectId = req.params.id;
-  const { subName } = req.body;
+  const { subjectName } = req.body; 
 
-  const query = 'UPDATE subject SET subName = ? WHERE subjectId = ?';
-  db.query(query, [subName, subjectId], (err, result) => {
+  const query = "UPDATE subject SET subjectName = ? WHERE subjectId = ?";
+  db.query(query, [subjectName, subjectId], (err, result) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.json({ message: 'Subject updated successfully!' });
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Subject not found" });
+    }
+
+    res.json({
+      message: "Subject updated successfully",
+      updatedSubject: { subjectId, subjectName },
+    });
   });
 };
+
 
 // Delete subject by ID
 exports.deleteSubject = (req, res) => {

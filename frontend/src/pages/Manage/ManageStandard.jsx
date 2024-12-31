@@ -4,10 +4,14 @@ import CssStyle from "./Manage.module.css";
 const ManageStandard = () => {
   const [standard, setStandard] = useState([]);
   const [sections, setSections] = useState([]); 
-  const [formData, setFormData] = useState({
+  const [addData, setaddData] = useState({
     standardName: "",
     sectionId: "",
   });
+  const[updateData,setupdateData]=useState({
+    standardName: standard.standardName,
+    sectionId: standard.sectionId,
+     })
 
   // Fetch sections from the Section table
   const fetchSections = async () => {
@@ -61,7 +65,7 @@ const ManageStandard = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(addData),
       });
 
       if (res.ok) {
@@ -80,7 +84,33 @@ const ManageStandard = () => {
       alert("Something went wrong. Please try again.");
     }
   };
-
+  //Update a standard
+  const handleEdit=async(standardId)=>{
+     try{
+      const res=await fetch(`http://localHost:5000/standard/${standardId}`,{
+        method:'PUT',headers:{
+          'Content-Type':'application/json'
+      },
+        body:JSON.stringify(updateData)
+      })
+      if(res.ok){
+        const updatedStandard = await res.json(); 
+          alert("Standard updated successfully");
+          setStandard((prevStandard =>
+            prevStandard.map((standard) =>
+              standard.standardId === standardId ? updatedStandard : standard
+            )
+          ))}
+          else {
+          const errorResponse = await res.json(); 
+          console.log("Error response:", errorResponse);
+          alert("Failed to update Standard: " + (errorResponse.message || "Unknown error"));
+        }}
+        catch(error){
+          console.error("An error occurred:", error);
+          alert("Something went wrong. Please try again.");
+        }  
+     }
   // Fetch sections
   useEffect(() => {
     fetchSections();
@@ -92,15 +122,15 @@ const ManageStandard = () => {
         <input
           type="text"
           placeholder="Standard Name"
-          value={formData.standardName}
+          value={addData.standardName}
           onChange={(e) =>
-            setFormData({ ...formData, standardName: e.target.value })
+            setaddData({ ...addData, standardName: e.target.value })
           }
         />
         <select
-          value={formData.sectionId}
+          value={addData.sectionId}
           onChange={(e) =>
-            setFormData({ ...formData, sectionId: Number(e.target.value) })
+            setaddData({ ...addData, sectionId: Number(e.target.value) })
           }
         >
           <option value="">Select Section</option>
@@ -138,10 +168,25 @@ const ManageStandard = () => {
               Delete
             </button>
             <br />
-            <div className={CssStyle.edit}></div>
-            <input type="text" placeholder="Standard Name" />
-            <input type="text" placeholder="Section" />
-            <button className="btn btn-success">Edit</button>
+            <div className={CssStyle.update}></div>
+            <input type="text"
+          placeholder='Updated Standard Name' 
+        onChange={(e) => setupdateData({ ...updateData, standardName: e.target.value })}/> <br />
+        <select
+          // value={addData.sectionId}
+          onChange={(e) =>
+            setupdateData({ ...updateData, sectionId: Number(e.target.value) })
+          }
+        >
+          <option value="">Select Section</option>
+          {sections.map((section) => (
+            <option key={section.sectionId} value={section.sectionId}>
+              {section.sectionName}
+            </option>
+          ))}
+        </select>
+
+      <button onClick={()=>handleEdit(standard.standardId)}className="btn btn-success">Edit</button>
           </li>
         ))}
       </ul>
