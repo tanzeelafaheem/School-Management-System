@@ -59,18 +59,17 @@ return res.json({ error: err.message });
  exports.updateSchedule=(req,res)=>{
   const scheduleId=req.params.id;
   const { standardId, subjectId, userId, startTime, endTime, scheduleDate } = req.body;
-  const query = 'UPDATE SCHEDULE SET standardId=?, subjectId=?, userId=?, startTime=?, endTime=?, date=?';
+  const query = 'UPDATE SCHEDULE SET standardId=?, subjectId=?, userId=?, startTime=?, endTime=?, scheduledate=?';
   db.query(query,[standardId, subjectId, userId, startTime, endTime, scheduleDate],(err,reult)=>{
     if (err) {
       return res.json({ error: err.message });
     }
-    res.json({ message: 'User updated successfully!' });
+    res.json({ message: 'Schedule updated successfully!' });
   });
  };
  //get by id
 exports.getScheduleById = (req, res) => {
   const scheduleId = req.params.id; 
-  console.log("Id:",scheduleId);
   const query = `
       SELECT 
           schedule.scheduleId,
@@ -104,5 +103,82 @@ exports.getScheduleById = (req, res) => {
   res.json(results[0]);
   });
 };
+
+//get by date
+exports.getScheduleByDate = (req, res) => {
+  const { scheduleDate } = req.params;
+
+  const query = `
+    SELECT 
+      schedule.scheduleId,
+      subject.subjectName,
+      user.userName,
+      standard.standardName,
+      section.sectionName,
+      schedule.startTime,
+      schedule.endTime,
+      schedule.Scheduledate
+    FROM 
+      schedule
+    JOIN 
+      subject ON schedule.subjectId = subject.subjectId
+    JOIN 
+      user ON schedule.userId = user.userId
+    JOIN 
+      standard ON schedule.standardId = standard.standardId
+    JOIN 
+      section ON standard.sectionId = section.sectionId
+    WHERE 
+      schedule.Scheduledate = ?`;
+
+  db.query(query, [scheduleDate], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ message: "No schedules found for the specified date" });
+    }
+    res.json(results);
+  });
+};
+
+//get bye userId
+exports.getScheduleByUserId = (req, res) => {
+  const { userId } = req.params;
+
+  const query = `
+    SELECT 
+      schedule.scheduleId,
+      subject.subjectName,
+      user.userName,
+      standard.standardName,
+      section.sectionName,
+      schedule.startTime,
+      schedule.endTime,
+      schedule.Scheduledate
+    FROM 
+      schedule
+    JOIN 
+      subject ON schedule.subjectId = subject.subjectId
+    JOIN 
+      user ON schedule.userId = user.userId
+    JOIN 
+      standard ON schedule.standardId = standard.standardId
+    JOIN 
+      section ON standard.sectionId = section.sectionId
+    WHERE 
+      schedule.userId = ?`;
+
+  db.query(query, [userId], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ message: "No schedules found for the specified user" });
+    }
+    res.json(results);
+  });
+};
+
 
 

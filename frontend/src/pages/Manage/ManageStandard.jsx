@@ -173,7 +173,6 @@ const ManageStandard = () => {
           placeholder='Updated Standard Name' 
         onChange={(e) => setupdateData({ ...updateData, standardName: e.target.value })}/> <br />
         <select
-          // value={addData.sectionId}
           onChange={(e) =>
             setupdateData({ ...updateData, sectionId: Number(e.target.value) })
           }

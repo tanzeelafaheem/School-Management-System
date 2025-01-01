@@ -113,7 +113,7 @@ const ManageSubject = () => {
       <input type="text"
        placeholder='Updated Subject Name' 
         onChange={(e) => setupdateData({ ...updateData, subjectName: e.target.value })}/> <br />
-      <button onClick={()=>handleupdate(subject.subjectId)}className="btn btn-success">update</button>
+      <button onClick={()=>handleEdit(subject.subjectId)}className="btn btn-success">update</button>
     </li>
   ))}
 </ul>

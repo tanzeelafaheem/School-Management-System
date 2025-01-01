@@ -22,7 +22,6 @@ import CssStyle from './Manage.module.css'
       const res = await fetch("http://localhost:5000/user");
       const jsonRes = await res.json();
       setTeacher(jsonRes); 
-      console.log(jsonRes);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -72,7 +71,7 @@ import CssStyle from './Manage.module.css'
   };
   const handleEdit=async(userId)=>{
     try{
-      const res=await fetch(`http://localhost/user/${userId}`,{
+      const res=await fetch(`http://localhost:5000/user/${userId}`,{
         method:'PUT',
         headers:{
           'Content-Type':'application/json'
@@ -148,7 +147,7 @@ import CssStyle from './Manage.module.css'
         <button onClick={()=>handleEdit(teacher.userId)}className="btn btn-success">Edit</button>
       </li>
     ))}
-</ul>
+</ul>  
     </div>
   );
 };
