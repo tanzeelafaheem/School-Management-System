@@ -24,7 +24,7 @@ exports.getAllSchedules = (req, res) => {
       section.sectionName,
       schedule.startTime,
       schedule.endTime,
-      schedule.Scheduledate
+      DATE_FORMAT(schedule.Scheduledate, '%Y-%m-%d') AS Scheduledate
     FROM 
       schedule
     JOIN 
@@ -104,9 +104,9 @@ exports.getScheduleById = (req, res) => {
   });
 };
 
-//get by date
-exports.getScheduleByDate = (req, res) => {
-  const { scheduleDate } = req.params;
+//get by date and userId
+exports.getScheduleByDateAndUser = (req, res) => {
+  const { userId, scheduleDate } = req.params;
 
   const query = `
     SELECT 
@@ -129,54 +129,16 @@ exports.getScheduleByDate = (req, res) => {
     JOIN 
       section ON standard.sectionId = section.sectionId
     WHERE 
-      schedule.Scheduledate = ?`;
+      DATE(schedule.Scheduledate) = ? AND user.userId = ?`; // Filter by date and userId
 
-  db.query(query, [scheduleDate], (err, results) => {
+  db.query(query, [scheduleDate, userId], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
     if (results.length === 0) {
-      return res.status(404).json({ message: "No schedules found for the specified date" });
+      return res.status(404).json({ message: "No schedules found for the specified date and user" });
     }
-    res.json(results);
-  });
-};
-
-//get bye userId
-exports.getScheduleByUserId = (req, res) => {
-  const { userId } = req.params;
-
-  const query = `
-    SELECT 
-      schedule.scheduleId,
-      subject.subjectName,
-      user.userName,
-      standard.standardName,
-      section.sectionName,
-      schedule.startTime,
-      schedule.endTime,
-      schedule.Scheduledate
-    FROM 
-      schedule
-    JOIN 
-      subject ON schedule.subjectId = subject.subjectId
-    JOIN 
-      user ON schedule.userId = user.userId
-    JOIN 
-      standard ON schedule.standardId = standard.standardId
-    JOIN 
-      section ON standard.sectionId = section.sectionId
-    WHERE 
-      schedule.userId = ?`;
-
-  db.query(query, [userId], (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    if (results.length === 0) {
-      return res.status(404).json({ message: "No schedules found for the specified user" });
-    }
-    res.json(results);
+    res.json(results[0]);
   });
 };
 

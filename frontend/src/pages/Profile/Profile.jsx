@@ -11,8 +11,8 @@ const profile = () => {
   return (
     <div>
       <div className={ProfileCss.details}>
-      <h1>Profile</h1>
-      <h2>{userType}</h2>
+      <h1>MY PROFILE</h1>
+      <h2>User Type:{userType}</h2>
       <h2>User Id : {userId}</h2>
       <h2>User Name :{userName}</h2>
       <h2>Email :{email}</h2>

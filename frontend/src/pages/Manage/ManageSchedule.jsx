@@ -100,30 +100,34 @@ const ManageSchedule = () => {
     }
   };
 
-  const handleDlt= async(scheduleId)=>{
-    try{
-      const res=await fetch(`http://localhost:5000/schedule/${scheduleId}`,{
-        method:"DELETE",
-      })
-      if(res.ok){
+  const handleDlt = async (scheduleId) => {
+    try {
+      const res = await fetch(`http://localhost:5000/schedule/${scheduleId}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
         alert("Schedule deleted succesfully!!");
-        setSchedule((prevSchedule)=>prevSchedule.filter((t)=>t.scheduleId!==schedule.scheduleId));
+        setSchedule((prevSchedule) =>
+          prevSchedule.filter((t) => t.scheduleId !== schedule.scheduleId)
+        );
+      } else {
+        alert("Could not delete Schedule");
       }
-      else{
-        alert("Could not delete Schedule")
-      }
-    } catch(error){
-      console.log("Erro:",error.message);
+    } catch (error) {
+      console.log("Erro:", error.message);
     }
   };
 
   const handleEdit = async (scheduleId) => {
-    
-    if (!updateData.userId || !updateData.subjectId || !updateData.scheduleDate) {
+    if (
+      !updateData.userId ||
+      !updateData.subjectId ||
+      !updateData.scheduleDate
+    ) {
       alert("Please fill out all required fields before submitting.");
       return;
     }
-  
+
     try {
       const res = await fetch(`http://localhost:5000/schedule/${scheduleId}`, {
         method: "PUT",
@@ -132,12 +136,10 @@ const ManageSchedule = () => {
         },
         body: JSON.stringify(updateData),
       });
-  
+
       if (res.ok) {
         const updatedSchedule = await res.json();
         alert("Schedule updated successfully!");
-  
-        // Update local state
         setSchedule((prevSchedule) =>
           prevSchedule.map((schedule) =>
             schedule.scheduleId === scheduleId ? updatedSchedule : schedule
@@ -146,14 +148,16 @@ const ManageSchedule = () => {
       } else {
         const errorResponse = await res.json();
         console.error("Error response:", errorResponse);
-        alert("Failed to update schedule: " + (errorResponse.message || "Unknown error"));
+        alert(
+          "Failed to update schedule: " +
+            (errorResponse.message || "Unknown error")
+        );
       }
     } catch (error) {
       console.error("An error occurred:", error);
       alert("Something went wrong. Please try again.");
     }
   };
-  
 
   useEffect(() => {
     fetchUSer();
@@ -166,7 +170,7 @@ const ManageSchedule = () => {
     <div>
       <div className={CssStyle.container}>
         <select
-          value={addData.userId||""}
+          value={addData.userId || ""}
           onChange={(e) =>
             setAddData({ ...addData, userId: Number(e.target.value) })
           }
@@ -182,7 +186,7 @@ const ManageSchedule = () => {
         </select>
         <br />
         <select
-          value={addData.subjectId||""}
+          value={addData.subjectId || ""}
           onChange={(e) =>
             setAddData({ ...addData, subjectId: Number(e.target.value) })
           }
@@ -196,7 +200,7 @@ const ManageSchedule = () => {
         </select>
         <br />
         <select
-          value={addData.standardId||""}
+          value={addData.standardId || ""}
           onChange={(e) =>
             setAddData({ ...addData, standardId: Number(e.target.value) })
           }
@@ -210,7 +214,7 @@ const ManageSchedule = () => {
         </select>
         <br />
         <select
-          value={addData.sectionId||""}
+          value={addData.sectionId || ""}
           onChange={(e) =>
             setAddData({ ...addData, sectionId: Number(e.target.value) })
           }
@@ -226,7 +230,7 @@ const ManageSchedule = () => {
         <p>Start-Time</p>
         <input
           type="time"
-          value={addData.startTime||""}
+          value={addData.startTime || ""}
           onChange={(e) =>
             setAddData({ ...addData, startTime: e.target.value })
           }
@@ -234,15 +238,13 @@ const ManageSchedule = () => {
         <p>End-Time</p>
         <input
           type="time"
-          value={addData.endTime||""}
-          onChange={(e) =>
-            setAddData({ ...addData, endTime: e.target.value })
-          }
+          value={addData.endTime || ""}
+          onChange={(e) => setAddData({ ...addData, endTime: e.target.value })}
         />
         <p>Schedule Date</p>
         <input
           type="date"
-          value={addData.scheduleDate||""}
+          value={addData.scheduleDate || ""}
           onChange={(e) =>
             setaddData({ ...addData, scheduleDate: e.target.value })
           }
@@ -267,16 +269,19 @@ const ManageSchedule = () => {
             <p>End Time: {schedule.endTime}</p>
             <p>Schedule Date: {schedule.Scheduledate}</p>
             <button
-            onClick={() => handleDlt(schedule.scheduleId)}
-              className="btn btn-danger" >
+              onClick={() => handleDlt(schedule.scheduleId)}
+              className="btn btn-danger"
+            >
               Delete
             </button>
             <br />
-             <div className={CssStyle.edit}>
+            <div className={CssStyle.edit}>
               <select
-                value={updateData.userId||""}
-                onChange={(e) =>
-                  setUpdateData({ ...updateData, userId: Number(e.target.value) })
+                value={updateData.userId || ""}
+                onChange={(e) => setUpdateData({
+                    ...updateData,
+                    userId: Number(e.target.value),
+                  })
                 }
               >
                 <option value="">Select Teacher</option>
@@ -290,7 +295,7 @@ const ManageSchedule = () => {
               </select>
               <br />
               <select
-                value={updateData.subjectId||""}
+                value={updateData.subjectId || ""}
                 onChange={(e) =>
                   setUpdateData({
                     ...updateData,
@@ -307,7 +312,7 @@ const ManageSchedule = () => {
               </select>
               <br />
               <select
-                value={updateData.standardId||""}
+                value={updateData.standardId || ""}
                 onChange={(e) =>
                   setUpdateData({
                     ...updateData,
@@ -324,7 +329,7 @@ const ManageSchedule = () => {
               </select>
               <br />
               <select
-                value={updateData.sectionId||""}
+                value={updateData.sectionId || ""}
                 onChange={(e) =>
                   setUpdateData({
                     ...updateData,
@@ -343,7 +348,7 @@ const ManageSchedule = () => {
               <p>Start-Time</p>
               <input
                 type="time"
-                value={updateData.startTime||""}
+                value={updateData.startTime || ""}
                 onChange={(e) =>
                   setUpdateData({ ...updateData, startTime: e.target.value })
                 }
@@ -351,7 +356,7 @@ const ManageSchedule = () => {
               <p>End-Time</p>
               <input
                 type="time"
-                value={updateData.endTime||""}
+                value={updateData.endTime || ""}
                 onChange={(e) =>
                   setUpdateData({ ...updateData, endTime: e.target.value })
                 }
@@ -359,7 +364,7 @@ const ManageSchedule = () => {
               <p>Schedule Date</p>
               <input
                 type="date"
-                value={updateData.scheduleDate||""}
+                value={updateData.scheduleDate || ""}
                 onChange={(e) =>
                   setUpdateData({
                     ...updateData,
@@ -373,7 +378,7 @@ const ManageSchedule = () => {
               >
                 Edit
               </button>
-              </div>
+            </div>
           </li>
         ))}
       </ul>
